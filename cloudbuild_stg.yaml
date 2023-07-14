@@ -1,0 +1,36 @@
+steps:
+# This step builds the container image.
+- name: 'gcr.io/cloud-builders/docker'
+  id: Build
+  args:
+  - 'build'
+  - '--no-cache'
+  - '--build-arg'
+  - 'COMMITID=$SHORT_SHA'
+  - '-t'
+  - 'gcr.io/$PROJECT_ID/hmt/flight-recorder/stg:$SHORT_SHA'
+  - '.'
+
+# This step pushes the image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  id: Push
+  args:
+  - 'push'
+  - 'gcr.io/$PROJECT_ID/hmt/flight-recorder/stg:$SHORT_SHA'
+
+# This step deploy the image to k8s cluster
+- name: 'gcr.io/cloud-builders/kubectl'
+  id: Deploy
+  args:
+  - 'set'
+  - 'image'
+  - 'deploy/svc-hmt-boarding'
+  - 'svc-hmt-flight-recorder=gcr.io/$PROJECT_ID/hmt/flight-recorder/stg:$SHORT_SHA'
+  - '-n'
+  - 'svc'
+  env:
+  - 'CLOUDSDK_COMPUTE_ZONE=asia-east1-a'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=k8s-cluster-hmt-stg2'
+
+#TAG
+tags : [ 'flight-recorder', 'stg', 'svc' ]

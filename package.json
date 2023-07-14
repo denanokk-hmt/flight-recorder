@@ -1,0 +1,22 @@
+{
+  "name": "flight_recorder",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./server"
+  },
+  "dependencies": {
+    "@google-cloud/datastore": "^6.3.1",
+    "@google-cloud/storage": "^3.1.0",
+    "fs": "0.0.1-security",
+    "grpc": "^1.24.2",
+    "net": "^1.0.2"
+  },
+  "repository": {},
+  "engines": {
+    "node": "14.15.x"
+  },
+  "devDependencies": {
+    "@google-cloud/nodejs-repo-tools": "^3.3.0"
+  }
+}
